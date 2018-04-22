@@ -76,7 +76,7 @@ int main()
   // display matrix
   drawCDKMatrix(myMatrix, true);
 
-  //string magic = "Magic: " + myHeader->magicNumber;
+  //string magic = "Magic: " + myHeader->magicNumber; must fix
   setCDKMatrixCell(myMatrix, 1, 1, "Magic: "/*magic.c_str()*/);
 
   //string version = "Version: " + myHeader->versionNumber;
