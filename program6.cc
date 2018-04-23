@@ -51,11 +51,10 @@ int main()
 
   BinaryFileHeader *myHeader = new BinaryFileHeader();
   ifstream binHeader ("cs3377.bin", ios::in | ios::binary);
+  binHeader.read((char *) myHeader, sizeof(BinaryFileHeader));
 
   BinaryFileRecord *myRecord = new BinaryFileRecord();
   ifstream binRecord ("cs3377.bin", ios::in | ios::binary);
-
-  binHeader.read((char *) myHeader, sizeof(BinaryFileHeader));
   binRecord.read((char *) myRecord, sizeof(BinaryFileRecord));
 
   window = initscr();
@@ -76,14 +75,21 @@ int main()
   // display matrix
   drawCDKMatrix(myMatrix, true);
 
-  //string magic = "Magic: " + myHeader->magicNumber; must fix
-  setCDKMatrixCell(myMatrix, 1, 1, "Magic: "/*magic.c_str()*/);
+  string magic = "Magic: " + myHeader->magicNumber;
+  setCDKMatrixCell(myMatrix, 1, 1, magic.c_str());
 
-  //string version = "Version: " + myHeader->versionNumber;
-  setCDKMatrixCell(myMatrix, 1, 2, "Version: "/*version.c_str()*/);
+  string version = "Version: " + myHeader->versionNumber;
+  setCDKMatrixCell(myMatrix, 1, 2, version.c_str());
 
-  //string records = "NumRecords: " + myHeader->numRecords;
-  setCDKMatrixCell(myMatrix, 1, 3, "NumRecords: "/*records.c_str()*/);
+  string records = "NumRecords: " + myHeader->numRecords;
+  setCDKMatrixCell(myMatrix, 1, 3, records.c_str());
+
+  int size = myHeader->numRecords;
+  for(int i = 0; i < 4 || i < size; i++){
+    string length = "strlen: " + myRecord->strLength;
+    setCDKMatrixCell(myMatrix, 2+i, 1, length.c_str());
+    setCDKMatrixCell(myMatrix, 2+i, 2, myRecord->stringBuffer);
+  }
 
   drawCDKMatrix(myMatrix, true); // required 
 
