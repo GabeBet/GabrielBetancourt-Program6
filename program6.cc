@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <stdint.h>
 #include <string>
+#include <inttypes.h>
 #include "cdk.h"
 
 #define MATRIX_WIDTH 3
