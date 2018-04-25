@@ -14,7 +14,7 @@
 
 #define MATRIX_WIDTH 3
 #define MATRIX_HEIGHT 5
-#define BOX_WIDTH 15
+#define BOX_WIDTH 20
 #define MATRIX_NAME_STRING "Binary File Contents"
 
 using namespace std;
@@ -56,7 +56,7 @@ int main()
 
   BinaryFileRecord *myRecord = new BinaryFileRecord();
   ifstream binRecord ("cs3377.bin", ios::in | ios::binary);
-  binRecord.read((char *) myRecord, sizeof(BinaryFileRecord));
+  binRecord.read((char *) myRecord, sizeof(BinaryFileHeader));
 
   window = initscr();
   cdkscreen = initCDKScreen(window);
@@ -76,21 +76,29 @@ int main()
   // display matrix
   drawCDKMatrix(myMatrix, true);
 
-  string magic = "Magic: " + myHeader->magicNumber;
-  setCDKMatrixCell(myMatrix, 1, 1, magic.c_str());
+  char magic[10];
+  sprintf(magic, "Magic: 0x%8X", myHeader->magicNumber);
+  setCDKMatrixCell(myMatrix, 1, 1, magic);
 
-  string version = "Version: " + myHeader->versionNumber;
-  setCDKMatrixCell(myMatrix, 1, 2, version.c_str());
+  char version[10];
+  sprintf(version, "Version: %u", myHeader->versionNumber);
+  setCDKMatrixCell(myMatrix, 1, 2, version);
 
-  string records = "NumRecords: " + myHeader->numRecords;
-  setCDKMatrixCell(myMatrix, 1, 3, records.c_str());
+  char records[10];
+  sprintf(records, "NumRecords: %lu", myHeader->numRecords);
+  setCDKMatrixCell(myMatrix, 1, 3, records);
 
   int size = myHeader->numRecords;
   for(int i = 0; i < 4 || i < size; i++){
-    string length = "strlen: " + myRecord->strLength;
-    setCDKMatrixCell(myMatrix, 2+i, 1, length.c_str());
-    setCDKMatrixCell(myMatrix, 2+i, 2, myRecord->stringBuffer);
-  }
+    binRecord.read((char *) myRecord, sizeof(BinaryFileRecord));
+    char length[10];
+    sprintf(length, "strlen: %d", myRecord->strLength);
+    setCDKMatrixCell(myMatrix, 2+i, 1, length);
+
+    char str[10];
+    sprintf(str, "%s", myRecord->stringBuffer);
+    setCDKMatrixCell(myMatrix, 2+i, 2, str);
+    }
 
   drawCDKMatrix(myMatrix, true); // required 
 
